@@ -4,6 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 
+/**
+ * Class CheckAge http request 需帶有 "age" 參數，且大於21 才能通過
+ * @package App\Http\Middleware
+ */
 class CheckAge
 {
     /**
