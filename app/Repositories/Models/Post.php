@@ -21,5 +21,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Post extends Model
 {
+    /**
+     * @var string 指定連線
+     */
+    protected $connection = 'mysql';
+
+    /**
+     * @var string posts 資料表
+     */
     protected $table = 'posts';
 }

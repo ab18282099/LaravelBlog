@@ -17,6 +17,11 @@ Route::get('/public/{userId}/{userName}', 'PublicController@userInfo');
 
 Route::get('posts', 'PublicController@displayPosts');
 
+// pgsql test
+Route::get('products', 'PublicController@displayProductName');
+Route::get('addProduct/{productName}', 'PublicController@addProduct');
+Route::get('getProduct/{productId}', 'PublicController@getProduct');
+
 // route prefix
 Route::namespace('Admin')->prefix('admin')->group(function() {
 
