@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Aspects\Annotations\Loggable;
+use App\Aspects\Annotations\UseTransaction;
 use App\Models\Product;
 use App\Repositories\PostRepository;
 use App\Repositories\ProductRepository;
@@ -48,13 +50,14 @@ class PublicController extends Controller
      * @param string $userName
      * @return string
      */
-    public function userInfo(string $userId, string $userName)
+    public function userInfo($userId, $userName)
     {
         return 'UserId : ' . $userId . ' UserName : ' . $userName;
     }
 
     /**
      * 顯示資料庫中 posts 資料表所有資料的 title
+     * @Loggable
      */
     public function displayPosts()
     {
@@ -66,6 +69,9 @@ class PublicController extends Controller
         }
     }
 
+    /**
+     * @Loggable
+     */
     public function displayProductName()
     {
         $products = $this->productRepository->getAll();
@@ -76,7 +82,12 @@ class PublicController extends Controller
         }
     }
 
-    public function addProduct(string $productName)
+    /**
+     * @param string $productName
+     * @UseTransaction(connection="pgsql")
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string
+     */
+    public function addProduct($productName)
     {
         $product = new Product();
         $product->product_name = $productName;
@@ -90,6 +101,34 @@ class PublicController extends Controller
         return '新增失敗';
     }
 
+    /**
+     * @UseTransaction(connection="pgsql")
+     * @return string
+     * @throws \Exception
+     */
+    public function gracefulTransaction()
+    {
+        foreach(range(1, 5) as $i)
+        {
+            $product = new Product();
+            $product->product_name = strval($i);
+            $product->created_at = Carbon::now();
+
+            $this->productRepository->add($product);
+
+            if ($i == 4)
+            {
+                throw new \Exception('Rollback!!!');
+            }
+        }
+
+        return 'done';
+    }
+
+    /**
+     * @Loggable
+     * @param $productId
+     */
     public function getProduct($productId)
     {
         $product = $this->productRepository->get((int)$productId);

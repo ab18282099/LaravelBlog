@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "472cf41f01e859dc72705a66b30f834f",
+    "content-hash": "2a9cf91a6a78764cdfe2295f82029eea",
     "packages": [
         {
             "name": "andrewsville/php-token-reflection",

@@ -27,7 +27,7 @@ class LoggingAspect implements Aspect
      * Writes a log info before method execution
      *
      * @param MethodInvocation $invocation
-     * @Before("execution(public **->*(*))")
+     * @Before("@execution(App\Aspects\Annotations\Loggable)")
      */
     public function beforeMethod(MethodInvocation $invocation)
     {

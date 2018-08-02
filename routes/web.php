@@ -21,6 +21,7 @@ Route::get('posts', 'PublicController@displayPosts');
 Route::get('products', 'PublicController@displayProductName');
 Route::get('addProduct/{productName}', 'PublicController@addProduct');
 Route::get('getProduct/{productId}', 'PublicController@getProduct');
+Route::get('testTransaction', 'PublicController@gracefulTransaction');
 
 // route prefix
 Route::namespace('Admin')->prefix('admin')->group(function() {
