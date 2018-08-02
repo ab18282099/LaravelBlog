@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\PostRepository;
 use App\Repositories\PostRepositoryImpl;
+use App\Repositories\ProductRepository;
+use App\Repositories\ProductRepositoryImpl;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -27,6 +29,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             PostRepository::class,
             PostRepositoryImpl::class
+        );
+
+        $this->app->bind(
+            ProductRepository::class,
+            ProductRepositoryImpl::class
         );
     }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Repositories\PostRepository;
+use App\Repositories\ProductRepository;
+use Carbon\Carbon;
 
 /**
  * Class PublicController
@@ -15,13 +18,18 @@ class PublicController extends Controller
      */
     private $postRepository;
 
+    private $productRepository;
+
     /**
      * PublicController constructor. 建構子
      * @param PostRepository $postRepository Post 資料儲存庫
      */
-    public function __construct(PostRepository $postRepository)
+    public function __construct(
+        PostRepository $postRepository,
+        ProductRepository $productRepository)
     {
         $this->postRepository = $postRepository;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -55,5 +63,36 @@ class PublicController extends Controller
         {
             print($post->title) . '<br>';
         }
+    }
+
+    public function displayProductName()
+    {
+        $products = $this->productRepository->getAll();
+
+        foreach($products as $product)
+        {
+            print($product->product_name) . '<br>';
+        }
+    }
+
+    public function addProduct(string $productName)
+    {
+        $product = new Product();
+        $product->product_name = $productName;
+        $product->created_at = Carbon::now();
+
+        if ($this->productRepository->add($product))
+        {
+            return redirect('/products');
+        }
+
+        return '新增失敗';
+    }
+
+    public function getProduct($productId)
+    {
+        $product = $this->productRepository->get((int)$productId);
+
+        print($product->product_name);
     }
 }
