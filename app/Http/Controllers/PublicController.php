@@ -23,6 +23,7 @@ class PublicController extends Controller
     /**
      * PublicController constructor. 建構子
      * @param PostRepository $postRepository Post 資料儲存庫
+     * @param ProductRepository $productRepository 商品資料儲存庫
      */
     public function __construct(
         PostRepository $postRepository,
