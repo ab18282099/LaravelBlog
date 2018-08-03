@@ -10,7 +10,8 @@
         "fideloper/proxy": "^4.0",
         "goaop/goaop-laravel-bridge": "^1.1",
         "laravel/framework": "5.6.*",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "spatie/async": "^0.0.4"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",
