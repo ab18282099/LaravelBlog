@@ -14,16 +14,15 @@
 // never put 'return' keyword in router
 Route::get('/', 'PublicController@index')->name('welcome');
 Route::get('/public/{userId}/{userName}', 'PublicController@userInfo');
-
 Route::get('posts', 'PublicController@displayPosts');
 
-// pgsql test
+// pgsql and aop test
 Route::get('products', 'PublicController@displayProductName');
 Route::get('addProduct/{productName}', 'PublicController@addProduct');
 Route::get('getProduct/{productId}', 'PublicController@getProduct');
 Route::get('testTransaction', 'PublicController@gracefulTransaction');
 
-// route prefix
+// route prefix with specific namespace(預設抓到App\Http\Controllers，如果再繼續往下定義就要設定 namespace)
 Route::namespace('Admin')->prefix('admin')->group(function() {
 
     // admin/users/
@@ -36,4 +35,5 @@ Route::namespace('Admin')->prefix('admin')->group(function() {
     });
 });
 
+// 轉跳
 Route::redirect('/old', '/new', 301);
