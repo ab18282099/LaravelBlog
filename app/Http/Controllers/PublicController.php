@@ -41,7 +41,9 @@ class PublicController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+        $post = $this->postRepository->getAll();
+
+        return view('welcome', [ 'posts' => $post ]);
     }
 
     /**

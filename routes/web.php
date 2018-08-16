@@ -13,6 +13,8 @@
 
 // never put 'return' keyword in router
 Route::get('/', 'PublicController@index')->name('welcome');
+Route::view('/about', 'about')->name('about');
+
 Route::get('/public/{userId}/{userName}', 'PublicController@userInfo');
 Route::get('posts', 'PublicController@displayPosts');
 
