@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Repositories\PostRepository;
 use App\Repositories\ProductRepository;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 /**
  * Class PublicController
@@ -43,7 +44,27 @@ class PublicController extends Controller
     {
         $post = $this->postRepository->getAll();
 
-        return view('welcome', [ 'posts' => $post ]);
+        return view('welcome', ['posts' => $post]);
+    }
+
+    public function contact()
+    {
+        return view('contact');
+    }
+
+    /**
+     * @param Request $request Http request
+     * @Loggable
+     */
+    public function contactPost(Request $request)
+    {
+        if($request->hasFile('attachment'))
+        {
+            $file = $request->file('attachment');
+            $file->move('images', $file->getClientOriginalName());
+        }
+
+        var_dump($request['email']);
     }
 
     /**
@@ -65,7 +86,7 @@ class PublicController extends Controller
     {
         $posts = $this->postRepository->getAll();
 
-        foreach($posts as $post)
+        foreach ($posts as $post)
         {
             print($post->title) . '<br>';
         }
@@ -78,7 +99,7 @@ class PublicController extends Controller
     {
         $products = $this->productRepository->getAll();
 
-        foreach($products as $product)
+        foreach ($products as $product)
         {
             print($product->product_name) . '<br>';
         }
@@ -110,7 +131,7 @@ class PublicController extends Controller
      */
     public function gracefulTransaction()
     {
-        foreach(range(1, 5) as $i)
+        foreach (range(1, 5) as $i)
         {
             $product = new Product();
             $product->product_name = strval($i);
