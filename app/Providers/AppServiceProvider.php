@@ -15,6 +15,8 @@ class AppServiceProvider extends ServiceProvider
     {
         // 載入View 共有之全域變數
         \View::share('title', env('APP_NAME'));
+
+        \Schema::defaultStringLength(191);
     }
 
     /**

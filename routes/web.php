@@ -12,7 +12,7 @@
 */
 
 // 首頁路由
-Route::get('/', 'PublicController@index')->name('home');
+Route::get('/', 'PublicController@index')->name('welcome');
 
 // Post 頁面
 Route::get('post/{id}', 'PublicController@singlePost')->name('singlePost');
@@ -22,13 +22,6 @@ Route::get('about', 'PublicController@about')->name('about');
 
 // 聯絡
 Route::get('contact', 'PublicController@contact')->name('contact');
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 

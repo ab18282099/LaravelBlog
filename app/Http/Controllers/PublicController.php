@@ -3,12 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Aspects\Annotations\Loggable;
-use App\Aspects\Annotations\UseTransaction;
-use App\Models\Product;
-use App\Repositories\PostRepository;
-use App\Repositories\ProductRepository;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 /**
  * Class PublicController
@@ -17,27 +11,15 @@ use Illuminate\Http\Request;
 class PublicController extends Controller
 {
     /**
-     * @var PostRepository  Post 資料儲存庫
-     */
-    private $postRepository;
-
-    private $productRepository;
-
-    /**
      * PublicController constructor. 建構子
-     * @param PostRepository $postRepository Post 資料儲存庫
-     * @param ProductRepository $productRepository 商品資料儲存庫
      */
-    public function __construct(
-        PostRepository $postRepository,
-        ProductRepository $productRepository)
+    public function __construct()
     {
-        $this->postRepository = $postRepository;
-        $this->productRepository = $productRepository;
     }
 
     /**
      * 首頁
+     * @Loggable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
@@ -47,6 +29,7 @@ class PublicController extends Controller
 
     /**
      * 貼文頁面
+     * @Loggable
      * @param $id string|integer 貼文編號
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -57,6 +40,7 @@ class PublicController extends Controller
 
     /**
      * 關於
+     * @Loggable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function about()
@@ -66,6 +50,7 @@ class PublicController extends Controller
 
     /**
      * 聯絡資訊
+     * @Loggable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function contact()

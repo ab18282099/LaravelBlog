@@ -26,14 +26,5 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
-            PostRepository::class,
-            PostRepositoryImpl::class
-        );
-
-        $this->app->bind(
-            ProductRepository::class,
-            ProductRepositoryImpl::class
-        );
     }
 }
