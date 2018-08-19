@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Aspects\Annotations\Loggable;
+use App\Aspects\Annotations\UseTransaction;
 use App\Models\Product;
 use App\Repositories\PostRepository;
 use App\Repositories\ProductRepository;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 /**
  * Class PublicController
@@ -23,6 +26,7 @@ class PublicController extends Controller
     /**
      * PublicController constructor. 建構子
      * @param PostRepository $postRepository Post 資料儲存庫
+     * @param ProductRepository $productRepository 商品資料儲存庫
      */
     public function __construct(
         PostRepository $postRepository,
@@ -38,7 +42,29 @@ class PublicController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+        $post = $this->postRepository->getAll();
+
+        return view('welcome', ['posts' => $post]);
+    }
+
+    public function contact()
+    {
+        return view('contact');
+    }
+
+    /**
+     * @param Request $request Http request
+     * @Loggable
+     */
+    public function contactPost(Request $request)
+    {
+        if($request->hasFile('attachment'))
+        {
+            $file = $request->file('attachment');
+            $file->move('images', $file->getClientOriginalName());
+        }
+
+        var_dump($request['email']);
     }
 
     /**
@@ -47,35 +73,44 @@ class PublicController extends Controller
      * @param string $userName
      * @return string
      */
-    public function userInfo(string $userId, string $userName)
+    public function userInfo($userId, $userName)
     {
         return 'UserId : ' . $userId . ' UserName : ' . $userName;
     }
 
     /**
      * 顯示資料庫中 posts 資料表所有資料的 title
+     * @Loggable
      */
     public function displayPosts()
     {
         $posts = $this->postRepository->getAll();
 
-        foreach($posts as $post)
+        foreach ($posts as $post)
         {
             print($post->title) . '<br>';
         }
     }
 
+    /**
+     * @Loggable
+     */
     public function displayProductName()
     {
         $products = $this->productRepository->getAll();
 
-        foreach($products as $product)
+        foreach ($products as $product)
         {
             print($product->product_name) . '<br>';
         }
     }
 
-    public function addProduct(string $productName)
+    /**
+     * @param string $productName
+     * @UseTransaction(connection="pgsql")
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string
+     */
+    public function addProduct($productName)
     {
         $product = new Product();
         $product->product_name = $productName;
@@ -89,6 +124,34 @@ class PublicController extends Controller
         return '新增失敗';
     }
 
+    /**
+     * @UseTransaction(connection="pgsql")
+     * @return string
+     * @throws \Exception
+     */
+    public function gracefulTransaction()
+    {
+        foreach (range(1, 5) as $i)
+        {
+            $product = new Product();
+            $product->product_name = strval($i);
+            $product->created_at = Carbon::now();
+
+            $this->productRepository->add($product);
+
+            if ($i == 4)
+            {
+                throw new \Exception('Rollback!!!');
+            }
+        }
+
+        return 'done';
+    }
+
+    /**
+     * @Loggable
+     * @param $productId
+     */
     public function getProduct($productId)
     {
         $product = $this->productRepository->get((int)$productId);

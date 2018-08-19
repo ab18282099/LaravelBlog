@@ -13,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // 載入View 共有之全域變數
+        \View::share('title', env('APP_NAME'));
     }
 
     /**
