@@ -42,120 +42,34 @@ class PublicController extends Controller
      */
     public function index()
     {
-        $post = $this->postRepository->getAll();
-
-        return view('welcome', ['posts' => $post]);
+        return view('welcome');
     }
 
+    /**
+     * 貼文頁面
+     * @param $id string|integer 貼文編號
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function singlePost($id)
+    {
+        return view('singlePost');
+    }
+
+    /**
+     * 關於
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function about()
+    {
+        return view('about');
+    }
+
+    /**
+     * 聯絡資訊
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function contact()
     {
         return view('contact');
-    }
-
-    /**
-     * @param Request $request Http request
-     * @Loggable
-     */
-    public function contactPost(Request $request)
-    {
-        if($request->hasFile('attachment'))
-        {
-            $file = $request->file('attachment');
-            $file->move('images', $file->getClientOriginalName());
-        }
-
-        var_dump($request['email']);
-    }
-
-    /**
-     * 由參數夾帶資料取得字串
-     * @param string $userId
-     * @param string $userName
-     * @return string
-     */
-    public function userInfo($userId, $userName)
-    {
-        return 'UserId : ' . $userId . ' UserName : ' . $userName;
-    }
-
-    /**
-     * 顯示資料庫中 posts 資料表所有資料的 title
-     * @Loggable
-     */
-    public function displayPosts()
-    {
-        $posts = $this->postRepository->getAll();
-
-        foreach ($posts as $post)
-        {
-            print($post->title) . '<br>';
-        }
-    }
-
-    /**
-     * @Loggable
-     */
-    public function displayProductName()
-    {
-        $products = $this->productRepository->getAll();
-
-        foreach ($products as $product)
-        {
-            print($product->product_name) . '<br>';
-        }
-    }
-
-    /**
-     * @param string $productName
-     * @UseTransaction(connection="pgsql")
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string
-     */
-    public function addProduct($productName)
-    {
-        $product = new Product();
-        $product->product_name = $productName;
-        $product->created_at = Carbon::now();
-
-        if ($this->productRepository->add($product))
-        {
-            return redirect('/products');
-        }
-
-        return '新增失敗';
-    }
-
-    /**
-     * @UseTransaction(connection="pgsql")
-     * @return string
-     * @throws \Exception
-     */
-    public function gracefulTransaction()
-    {
-        foreach (range(1, 5) as $i)
-        {
-            $product = new Product();
-            $product->product_name = strval($i);
-            $product->created_at = Carbon::now();
-
-            $this->productRepository->add($product);
-
-            if ($i == 4)
-            {
-                throw new \Exception('Rollback!!!');
-            }
-        }
-
-        return 'done';
-    }
-
-    /**
-     * @Loggable
-     * @param $productId
-     */
-    public function getProduct($productId)
-    {
-        $product = $this->productRepository->get((int)$productId);
-
-        print($product->product_name);
     }
 }

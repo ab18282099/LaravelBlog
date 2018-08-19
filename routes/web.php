@@ -11,34 +11,25 @@
 |
 */
 
-// never put 'return' keyword in router
-Route::get('/', 'PublicController@index')->name('welcome');
-Route::view('/about', 'about')->name('about');
-Route::get('/contact', 'PublicController@contact')->name('contact');
+// 首頁路由
+Route::get('/', 'PublicController@index')->name('home');
 
-Route::post('/contact', 'PublicController@contactPost')->name('contactPost');
+// Post 頁面
+Route::get('post/{id}', 'PublicController@singlePost')->name('singlePost');
 
-Route::get('/public/{userId}/{userName}', 'PublicController@userInfo');
-Route::get('posts', 'PublicController@displayPosts');
+// 關於
+Route::get('about', 'PublicController@about')->name('about');
 
-// pgsql and aop test
-Route::get('products', 'PublicController@displayProductName');
-Route::get('addProduct/{productName}', 'PublicController@addProduct');
-Route::get('getProduct/{productId}', 'PublicController@getProduct');
-Route::get('testTransaction', 'PublicController@gracefulTransaction');
+// 聯絡
+Route::get('contact', 'PublicController@contact')->name('contact');
+Auth::routes();
 
-// route prefix with specific namespace(預設抓到App\Http\Controllers，如果再繼續往下定義就要設定 namespace)
-Route::namespace('Admin')->prefix('admin')->group(function() {
+Route::get('/home', 'HomeController@index')->name('home');
 
-    // admin/users/
-    Route::get('users', 'UsersController@listUsers');
+Auth::routes();
 
-    Route::get('posts', function() {
-        // return route('welcome', ['name' => 'jackson', 'age' => '25']);
+Route::get('/home', 'HomeController@index')->name('home');
 
-        return route('welcome');
-    });
-});
+Auth::routes();
 
-// 轉跳
-Route::redirect('/old', '/new', 301);
+Route::get('/home', 'HomeController@index')->name('home');
