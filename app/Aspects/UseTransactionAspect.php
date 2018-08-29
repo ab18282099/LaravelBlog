@@ -19,6 +19,10 @@ class UseTransactionAspect implements Aspect
      */
     private $logger;
 
+    /**
+     * UseTransactionAspect constructor.
+     * @param LoggerInterface $logger
+     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -32,24 +36,28 @@ class UseTransactionAspect implements Aspect
      */
     public function aroundMethod(MethodInvocation $invocation)
     {
+        // 取得指定的連線
         $connectionName = $invocation->getMethod()
             ->getAnnotation('App\Aspects\Annotations\UseTransaction')
             ->connection;
 
         try
         {
+            // 開啟交易
             DB::connection($connectionName)->beginTransaction();
 
+            // invoke
             $result = $invocation->proceed();
 
+            // 完成後 commit
             DB::connection($connectionName)->commit();
 
             return $result;
         }
         catch (\Exception $exception)
         {
+            // 紀錄錯誤並 rollback
             $this->logger->error($exception->getMessage());
-
             DB::connection($connectionName)->rollBack();
 
             throw $exception;

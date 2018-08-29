@@ -18,6 +18,10 @@ class LoggingAspect implements Aspect
      */
     private $logger;
 
+    /**
+     * LoggingAspect constructor.
+     * @param LoggerInterface $logger
+     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
